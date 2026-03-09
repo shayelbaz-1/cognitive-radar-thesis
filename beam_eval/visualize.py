@@ -3,9 +3,12 @@
 Usage::
 
     pip install dash dash-bootstrap-components
+    python beam_eval/visualize.py
+
+    # override defaults if needed:
     python beam_eval/visualize.py \\
-        --data_root data/nuScenes \\
-        --ensemble_ckpt /path/to/ensemble_lss.ckpt
+        --data_root /path/to/nuScenes \\
+        --ensemble_ckpt /path/to/ensemble.pth
 
 Controls:
     Scene dropdown   – pick a validation scene
@@ -669,13 +672,18 @@ def _update(sample_idx, budget_pct, scene_token):
 
 
 def _parse_args():
+    _repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    _default_data = "/home/shayelbaz/repos/data_nuscenes"
+    _default_ckpt = os.path.join(
+        _repo_root, "checkpoints", "lss_ensemble", "best_ensemble_USED_FOR_RESULTS.pth"
+    )
     p = argparse.ArgumentParser(description="Beam-filtered radar viz app.")
     p.add_argument(
         "--data_root",
-        required=True,
+        default=_default_data,
         help="Path to nuScenes root (contains nuscenes_infos_val.pkl).",
     )
-    p.add_argument("--ensemble_ckpt", default="", help="Ensemble LSS checkpoint.")
+    p.add_argument("--ensemble_ckpt", default=_default_ckpt, help="Ensemble LSS checkpoint.")
     p.add_argument("--beam_budget_pct", type=float, default=20.0)
     p.add_argument("--beam_width", type=float, default=3.0)
     p.add_argument("--azimuth_fov", type=float, default=360.0)
