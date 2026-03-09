@@ -14,8 +14,8 @@ from pyquaternion import Quaternion
 
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 _REPO_ROOT = os.path.dirname(os.path.dirname(_THIS_DIR))
-_SIMULATION_DIR = os.path.join(_REPO_ROOT, "simulation")
-_LSS_DIR = os.path.join(_REPO_ROOT, "lift_splat_shoot")
+_SIMULATION_DIR = os.path.join(_REPO_ROOT, "prior_work", "simulation")
+_LSS_DIR = os.path.join(_REPO_ROOT, "prior_work", "lift_splat_shoot")
 for _p in (_SIMULATION_DIR, _LSS_DIR):
     if _p not in sys.path:
         sys.path.insert(0, _p)
