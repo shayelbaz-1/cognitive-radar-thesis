@@ -1,0 +1,90 @@
+# =============================================================================
+# cognitive-radar-thesis .gitignore
+# Only code, scripts, and thesis are version-controlled.
+# Results, checkpoints, and data are local-only.
+# =============================================================================
+
+# ── Unversioned heavy folders ─────────────────────────────────────────────────
+checkpoints/
+results/
+data/
+
+# ── Model weights ─────────────────────────────────────────────────────────────
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.h5
+*.pkl
+*.npz
+*.npy
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+*.so
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+.env
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Logs and caches ───────────────────────────────────────────────────────────
+*.log
+*.csv
+logs/
+runs/
+wandb/
+mlruns/
+lightning_logs/
+events.out.tfevents.*
+
+# ── Images / media (generated outputs) ───────────────────────────────────────
+# NOTE: thesis figures committed by hand should be placed in thesis/figures/
+# and explicitly added with git add -f
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.avi
+
+# ── NuScenes / large data ─────────────────────────────────────────────────────
+*.json.gz
+*.tar.gz
+*.zip
+data_nuscenes/
+
+# ── OS / editor ───────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── C extensions (built ops inside submodules) ────────────────────────────────
+*.o
+*.a
+*.lib
+*.dll
+
+# =============================================================================
+# EXCEPTIONS — explicitly track these even if matching above patterns
+# =============================================================================
+# Thesis proof figures (curated, not generated at runtime)
+!thesis/figures/*.png

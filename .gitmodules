@@ -1,0 +1,6 @@
+[submodule "crn"]
+	path = crn
+	url = https://github.com/youngskkim/CRN.git
+[submodule "lift_splat_shoot"]
+	path = lift_splat_shoot
+	url = https://github.com/nv-tlabs/lift-splat-shoot.git
