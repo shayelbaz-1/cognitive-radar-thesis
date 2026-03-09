@@ -88,6 +88,15 @@ NuScenes dataset lives at: `/home/shayelbaz/repos/data_nuscenes/`
 Pre-processed radar BEV: inside `crn/data/nuScenes/radar_bev_filter/`
 The `config.data_root` default is `"data/nuScenes"` (relative to repo root).
 
+## Checkpoints
+- `checkpoints/lss_ensemble/best_ensemble_USED_FOR_RESULTS.pth` — **the exact checkpoint
+  used to generate all entropy maps and beam_eval results (20/40/60/80%).** Verified via
+  meta.json in results/beam_eval/beam_eval_cache/. Run: full_trainval_5heads_from_scratch,
+  2026-01-04_15-23-47.
+- `checkpoints/lss_ensemble/best_ensemble.pth` — different checkpoint (do not use for
+  reproducing results).
+- `checkpoints/crn/CRN_r18_256x704_128x128_4key.pth` — CRN R18 model used for all evals.
+
 ## Git Submodules
 After a fresh clone, initialize submodules with:
 ```bash
