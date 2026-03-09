@@ -6,9 +6,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 
-OUT_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), "CRN", "outputs")
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_ROOT = os.path.join(_REPO_ROOT, "results", "beam_eval")
 BASELINE_PATH = os.path.join(OUT_ROOT, "det", "CRN_r18_256x704_128x128_4key", "metrics_summary.json")
-PLOT_DIR = os.path.join(os.path.dirname(__file__), "plots")
+PLOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "plots")
 os.makedirs(PLOT_DIR, exist_ok=True)
 
 BUDGETS = [0, 20, 40, 60, 80, 100]  # pct values on x-axis (0 = no radar)

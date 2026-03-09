@@ -15,17 +15,17 @@ Three-step pipeline with persistent caching:
 Usage::
 
     conda activate CRN
-    cd crn_fusion
-    python beam_filtered_eval/evaluate.py \\
-        --ensemble_ckpt path/to/ensemble.pth \\
+    cd cognitive-radar-thesis
+    python beam_eval/evaluate.py \\
+        --ensemble_ckpt checkpoints/lss_ensemble/best_ensemble.pth \\
         --model r18 \\
         --beam_budget_pct 80 \\
         --gpus 4
 
     # Re-run with a different budget — entropy is reused, only beam
     # selection + CRN evaluation are repeated:
-    python beam_filtered_eval/evaluate.py \\
-        --ensemble_ckpt path/to/ensemble.pth \\
+    python beam_eval/evaluate.py \\
+        --ensemble_ckpt checkpoints/lss_ensemble/best_ensemble.pth \\
         --beam_budget_pct 60
 """
 
@@ -50,19 +50,18 @@ from tqdm import tqdm
 # Path setup
 # ---------------------------------------------------------------------------
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-_CRN_FUSION_DIR = os.path.dirname(_THIS_DIR)
-_CRN_DIR = os.path.join(_CRN_FUSION_DIR, "CRN")
-_REPO_ROOT = os.path.dirname(_CRN_FUSION_DIR)
+_REPO_ROOT = os.path.dirname(_THIS_DIR)
+_CRN_DIR = os.path.join(_REPO_ROOT, "crn")
 
-for _p in (_CRN_DIR, _CRN_FUSION_DIR):
+for _p in (_CRN_DIR, _REPO_ROOT):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from beam_filtered_eval.config import BeamEvalConfig  # noqa: E402
-from beam_filtered_eval.beam_selector.ensemble_lss import (  # noqa: E402
+from beam_eval.config import BeamEvalConfig  # noqa: E402
+from beam_eval.beam_selector.ensemble_lss import (  # noqa: E402
     EnsembleBeamSelector,
 )
-from beam_filtered_eval.dataset import BeamFilteredDataset  # noqa: E402
+from beam_eval.dataset import BeamFilteredDataset  # noqa: E402
 from datasets.nusc_det_dataset import collate_fn  # noqa: E402
 
 
@@ -348,7 +347,7 @@ def phase2_crn_evaluation(config, beam_selections, num_gpus=1, num_workers=8,
     """
     dir_name = (f"beam_filtered_{config.crn_model}_"
                 f"budget{config.beam_budget_pct:.0f}pct{strategy_suffix}")
-    out_dir = os.path.join("outputs", dir_name)
+    out_dir = os.path.join(_REPO_ROOT, "results", "beam_eval", dir_name)
 
     ModelClass = _make_beam_filtered_model(
         config.crn_model,
@@ -400,7 +399,7 @@ def parse_args():
     p.add_argument("--crn_ckpt", type=str, default=None,
                     help="Path to CRN checkpoint (auto-detected if omitted).")
     p.add_argument("--data_root", type=str, default="data/nuScenes")
-    p.add_argument("--cache_dir", type=str, default="outputs/beam_eval_cache",
+    p.add_argument("--cache_dir", type=str, default="results/beam_eval/beam_eval_cache",
                     help="Directory for cached entropy maps and beam "
                          "selections.")
     p.add_argument("--gpus", type=int, default=0,
@@ -439,11 +438,11 @@ def main():
 
     os.chdir(_CRN_DIR)
 
-    data_root_abs = os.path.join(_CRN_DIR, config.data_root)
+    data_root_abs = os.path.join(_REPO_ROOT, config.data_root)
     val_info_path = os.path.join(data_root_abs, "nuscenes_infos_val.pkl")
     val_infos = mmcv.load(val_info_path)
 
-    cache_dir = os.path.join(_CRN_DIR, args.cache_dir)
+    cache_dir = os.path.join(_REPO_ROOT, args.cache_dir)
 
     # Strategy suffix for output directory naming
     strategy_suffix = {"entropy": "", "uniform": "_uniform",
@@ -493,7 +492,7 @@ def main():
     # Step 3 — CRN evaluation
     dir_name = (f"beam_filtered_{config.crn_model}_"
                 f"budget{config.beam_budget_pct:.0f}pct{strategy_suffix}")
-    out_dir = os.path.join(_CRN_DIR, "outputs", dir_name)
+    out_dir = os.path.join(_REPO_ROOT, "results", "beam_eval", dir_name)
     print(f"\nStep 3: CRN evaluation → {out_dir}")
     phase2_crn_evaluation(
         config, beam_selections, num_gpus=num_gpus, num_workers=num_workers,

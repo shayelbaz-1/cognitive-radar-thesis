@@ -3,8 +3,8 @@
 Usage::
 
     pip install dash dash-bootstrap-components
-    python beam_filtered_eval/visualize.py \\
-        --data_root CRN/data/nuScenes \\
+    python beam_eval/visualize.py \\
+        --data_root data/nuScenes \\
         --ensemble_ckpt /path/to/ensemble_lss.ckpt
 
 Controls:
@@ -41,19 +41,18 @@ from PIL import Image as PILImage
 
 # ── Path setup ────────────────────────────────────────────────────────
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-_CRN_FUSION_DIR = os.path.dirname(_THIS_DIR)
-_CRN_DIR = os.path.join(_CRN_FUSION_DIR, "CRN")
-_REPO_ROOT = os.path.dirname(_CRN_FUSION_DIR)
+_REPO_ROOT = os.path.dirname(_THIS_DIR)
+_CRN_DIR = os.path.join(_REPO_ROOT, "crn")
 
-for _p in (_CRN_FUSION_DIR, _CRN_DIR, _REPO_ROOT):
+for _p in (_REPO_ROOT, _CRN_DIR):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from beam_filtered_eval.config import BeamEvalConfig  # noqa: E402
-from beam_filtered_eval.beam_selector.ensemble_lss import (  # noqa: E402
+from beam_eval.config import BeamEvalConfig  # noqa: E402
+from beam_eval.beam_selector.ensemble_lss import (  # noqa: E402
     EnsembleBeamSelector,
 )
-from beam_filtered_eval.radar_filter import filter_bev_points_by_beams  # noqa: E402
+from beam_eval.radar_filter import filter_bev_points_by_beams  # noqa: E402
 
 # ── Colour palette & shared Plotly styling ────────────────────────────
 _C = {
